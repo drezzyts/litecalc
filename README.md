@@ -15,7 +15,7 @@ npm install litecalc
 Using litecalc is straightforward. After installing it, you can import it and start evaluating expressions right away.
 
 ```typescript
-import litecalc from 'litecalc';
+import { litecalc } from 'litecalc';
 
 // Addition and Subtraction:
 litecalc('1 + 1'); // Output: 2
