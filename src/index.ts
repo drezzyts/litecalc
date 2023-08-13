@@ -14,7 +14,3 @@ export function litecalc(expression: string) {
   
   return result as number;
 }
-
-const r = litecalc("");
-
-console.log(r);
