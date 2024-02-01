@@ -15,6 +15,8 @@ export default class Parser implements ParserProps {
 
     this.tokens = lexer.lex();
     this.cursor = 0;
+
+    if (this.tokens.length == 1) return new Parser('0');
   }
 
   public parse(): Program {
