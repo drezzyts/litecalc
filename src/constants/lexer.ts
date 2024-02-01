@@ -2,10 +2,17 @@ import { TokenKind } from "../types/ast";
 
 export const LEXER_SPEC: Array<[RegExp, TokenKind]> = [
   // Skippable
- [/^\s+/, TokenKind.Skippable],
+  [/^\s+/, TokenKind.Skippable],
 
   // Number
   [/^\d+/, TokenKind.Number],
+  
+  // Identifier
+  [/^\w+/, TokenKind.Identifier],
+
+  // Delimiters
+  [/^\(/, TokenKind.OpenParen],
+  [/^\)/, TokenKind.CloseParen],
   
   // Operators
   [/^\+/, TokenKind.Plus],

@@ -1,13 +1,16 @@
 {
   "name": "litecalc",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Simple math expressions evaluator.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx src/index.ts",
+    "dev:watch": "tsx watch src/index.ts",
+    "test": "tsx src/index.spec.ts",
+    "test:watch": "tsx watch src/index.spec.ts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["math"],
+  "author": "drezzyts",
   "license": "ISC",
   "devDependencies": {
     "tsx": "^3.12.7",
