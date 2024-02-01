@@ -1,5 +1,7 @@
-import { LexerProps, TokenKind } from "../types/ast";
 import { LEXER_SPEC } from "../constants/lexer";
+import { LexerProps } from "../types/frontend";
+import { TokenKind } from "../types/ast";
+
 import Token from "../structs/Token";
 
 export default class Lexer implements LexerProps {
