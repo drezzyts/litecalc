@@ -11,7 +11,8 @@ export enum TokenKind {
   Eof = 'Eof',
 
   OpenParen = 'OpenParen',
-  CloseParen = 'CloseParen'
+  CloseParen = 'CloseParen',
+  Comma = "Comma"
 }
 
 export interface TokenProps {
@@ -22,10 +23,12 @@ export interface TokenProps {
 }
 
 export enum ExpressionKind {
+  Identifier = 'Identifier',
   NumberExpression = 'NumberExpression',
   BinaryExpression = 'BinaryExpression',
   UnaryExpression = 'UnaryExpression',
-  ParenthesizedExpression = 'ParenthesizedExpression'
+  ParenthesizedExpression = 'ParenthesizedExpression',
+  CallExpression = 'CallExpression',
 }
 
 export enum StatementKind {

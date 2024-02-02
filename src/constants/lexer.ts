@@ -13,6 +13,7 @@ export const LEXER_SPEC: Array<[RegExp, TokenKind]> = [
   // Delimiters
   [/^\(/, TokenKind.OpenParen],
   [/^\)/, TokenKind.CloseParen],
+  [/^\,/, TokenKind.Comma],
   
   // Operators
   [/^\+/, TokenKind.Plus],

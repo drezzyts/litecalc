@@ -1,3 +1,4 @@
+import { Identifier } from "../structs/Expressions";
 import Token from "../structs/Token";
 import { ExpressionKind } from "./ast";
 
@@ -30,3 +31,15 @@ export interface ParenthesizedExpressionProps extends Expression {
   expression: Expression
 }
 
+export interface IdentifierProps extends Expression {
+  kind: ExpressionKind.Identifier,
+  token: Token,
+  name: string
+}
+
+export interface CallExpressionProps extends Expression {
+  kind: ExpressionKind.CallExpression,
+  callee: Token,
+  parens: [open: Token, close: Token],
+  args: Expression[],
+}

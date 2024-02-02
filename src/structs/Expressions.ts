@@ -4,7 +4,9 @@ import {
   NumberExpressionProps, 
   BinaryExpressionProps, 
   Expression,
-  UnaryExpressionProps
+  UnaryExpressionProps,
+  IdentifierProps,
+  CallExpressionProps
 } from "../types/expressions";
 
 import Token from "./Token";
@@ -38,5 +40,23 @@ export class ParenthesizedExpression implements ParenthesizedExpressionProps {
 
   public constructor(public parens: [open: Token, close: Token], public expression: Expression) {
     this.kind = ExpressionKind.ParenthesizedExpression;
+  }
+}
+
+export class Identifier implements IdentifierProps {
+  public kind: ExpressionKind.Identifier;
+
+  public constructor(public name: string, public token: Token) {
+    this.kind = ExpressionKind.Identifier;
+  }
+}
+
+export class CallExpression implements CallExpressionProps {
+  public kind: ExpressionKind.CallExpression;
+
+  public constructor(public args: Expression[], public callee: Token, 
+    public parens: [open: Token, close: Token]) 
+  {
+    this.kind = ExpressionKind.CallExpression;
   }
 }

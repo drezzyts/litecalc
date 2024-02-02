@@ -1,4 +1,4 @@
-import { BinaryExpression, NumberExpression, ParenthesizedExpression, UnaryExpression } from "../structs/Expressions";
+import { BinaryExpression, CallExpression, Identifier, NumberExpression, ParenthesizedExpression, UnaryExpression } from "../structs/Expressions";
 import { Program } from "../structs/Statements";
 import Token from "../structs/Token";
 import { TokenKind } from "../types/ast";
@@ -16,7 +16,7 @@ export default class Parser implements ParserProps {
     this.tokens = lexer.lex();
     this.cursor = 0;
 
-    if (this.tokens.length == 1) return new Parser('0');
+    if (this.tokens.length <= 1) return new Parser('0');
   }
 
   public parse(): Program {
@@ -68,6 +68,10 @@ export default class Parser implements ParserProps {
     if (this.current.kind == TokenKind.Minus)
       return this.parseUnaryExpression();
 
+    if (this.current.kind == TokenKind.Identifier)
+      if (this.peek(1).kind == TokenKind.OpenParen) return this.parseCallExpression();
+      else return this.parseIdentifier();
+
    throw new Error(`parser (l:${this.current.line}, c:${this.current.col}): Invalid token found during parsing: "${this.current.text}"`);
   }
 
@@ -94,8 +98,45 @@ export default class Parser implements ParserProps {
     return new UnaryExpression(operand, operator);
   }
 
+  private parseCallExpression(): CallExpression {
+    const callee = this.expect(TokenKind.Identifier);
+    const close = this.expect(TokenKind.OpenParen);
+    const args = this.parseArguments();
+    const open = this.expect(TokenKind.CloseParen);
+    const parens: [open: Token, close: Token] = [open, close];
+
+    return new CallExpression(args, callee, parens);
+  }
+
+  private parseArguments(): Expression[] {
+    const args: Expression[] = [];
+
+    while (this.current.kind !== TokenKind.CloseParen && this.current.kind !== TokenKind.Eof) {
+      if(args.length >= 1) this.expect(TokenKind.Comma);
+      
+      const expression = this.parseExpression();
+      args.push(expression);
+    }
+
+    return args;
+  }
+
+  private parseIdentifier() {
+    const token = this.expect(TokenKind.Identifier);
+    const name = token.text;
+
+    return new Identifier(name, token); 
+  }
+
   private get current(): Token {
     return this.tokens[this.cursor];
+  }
+
+  private peek(offset: number = 0): Token {
+    if (this.cursor + offset > this.tokens.length) return this.tokens[this.tokens.length - 1];
+    if (this.cursor + offset < 0) return this.tokens[0];
+
+    return this.tokens[this.cursor + offset];
   }
 
   private expect(kind: TokenKind): Token {
