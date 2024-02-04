@@ -1,5 +1,5 @@
 import { factorial } from "../lib/functions";
-import { constant, remove } from "../lib/instructions";
+import { add, set, remove, sub } from "../lib/instructions";
 import Enviroment from "../structs/Enviroment";
 
 export const FUNCTIONS: [string, ((...args: number[]) => number)][] = [
@@ -13,8 +13,10 @@ export const FUNCTIONS: [string, ((...args: number[]) => number)][] = [
 ]
 
 export const INSTRUCTIONS: [string, ((_enviroment: Enviroment, ...args: any[]) => void)][] = [
-  ['constant', constant],
-  ['remove', remove]
+  ['set', set],
+  ['remove', remove],
+  ['add', add],
+  ['sub', sub]
 ]
 
 export const CONSTANTS: [string, number][] = [
