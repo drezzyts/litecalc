@@ -6,7 +6,7 @@ import {
   Expression,
   UnaryExpressionProps,
   IdentifierProps,
-  CallExpressionProps
+  CallExpressionProps,
 } from "../types/expressions";
 
 import Token from "./Token";
@@ -55,7 +55,7 @@ export class CallExpression implements CallExpressionProps {
   public kind: ExpressionKind.CallExpression;
 
   public constructor(public args: Expression[], public callee: Token, 
-    public parens: [open: Token, close: Token]) 
+    public parens: [open: Token, close: Token], public instruction: boolean = false) 
   {
     this.kind = ExpressionKind.CallExpression;
   }

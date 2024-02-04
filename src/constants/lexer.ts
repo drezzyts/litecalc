@@ -5,7 +5,7 @@ export const LEXER_SPEC: Array<[RegExp, TokenKind]> = [
   [/^\s+/, TokenKind.Skippable],
 
   // Number
-  [/^\d+/, TokenKind.Number],
+  [/^\d+(\.\d+)?/, TokenKind.Number],
   
   // Identifier
   [/^\w+/, TokenKind.Identifier],
@@ -20,4 +20,5 @@ export const LEXER_SPEC: Array<[RegExp, TokenKind]> = [
   [/^\-/, TokenKind.Minus],
   [/^\*/, TokenKind.Star],
   [/^\//, TokenKind.Slash],
+  [/^\@/, TokenKind.At]
 ];

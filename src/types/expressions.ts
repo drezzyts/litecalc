@@ -42,4 +42,5 @@ export interface CallExpressionProps extends Expression {
   callee: Token,
   parens: [open: Token, close: Token],
   args: Expression[],
-}
+  instruction: boolean
+} 

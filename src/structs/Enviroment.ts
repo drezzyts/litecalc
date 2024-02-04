@@ -1,13 +1,11 @@
-import { FUNCTIONS, CONSTANTS } from "../constants/runtime";
+import { FUNCTIONS, CONSTANTS, INSTRUCTIONS } from "../constants/runtime";
 
 export default class Enviroment {
-  public constants: Map<string, number>;
-  public functions: Map<string, ((...args: number[]) => number)>;
+  public constants = new Map(CONSTANTS);
+  public functions = new Map(FUNCTIONS);
+  public instructions = new Map(INSTRUCTIONS);
 
-  public constructor() {
-    this.constants = new Map(CONSTANTS);
-    this.functions = new Map(FUNCTIONS);
-  }
+  public constructor() {}
 
   public hasConstant(name: string): boolean {
     return this.constants.has(name);
@@ -19,6 +17,10 @@ export default class Enviroment {
 
   public getFunction(callee: string) {
     return this.functions.get(callee);
+  }
+
+  public getInstruction(callee: string) {
+    return this.instructions.get(callee);
   }
 
   public getConstant(name: string) {

@@ -1,3 +1,5 @@
+import { ExpressionStatement } from "../structs/Statements";
+import Token from "../structs/Token";
 import { StatementKind } from "./ast";
 import { Expression } from "./expressions";
 
@@ -7,5 +9,10 @@ export abstract class Statement {
 
 export interface ProgramProps extends Statement {
   kind: StatementKind.Program,
-  expression: Expression
+  statements: ExpressionStatement[]
 } 
+
+export interface ExpressionStatementProps extends Statement {
+  kind: StatementKind.ExpressionStatement,
+  expression: Expression
+}

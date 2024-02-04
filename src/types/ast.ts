@@ -5,6 +5,7 @@ export enum TokenKind {
   Plus = 'Plus',
   Star = 'Star',
   Slash = 'Slash',
+  At = 'At',
 
   Identifier = 'Identifier',
   Skippable = 'Skippable',
@@ -12,7 +13,7 @@ export enum TokenKind {
 
   OpenParen = 'OpenParen',
   CloseParen = 'CloseParen',
-  Comma = "Comma"
+  Comma = 'Comma',
 }
 
 export interface TokenProps {
@@ -33,4 +34,5 @@ export enum ExpressionKind {
 
 export enum StatementKind {
   Program = 'Program',
+  ExpressionStatement = 'ExpressionStatement'
 }

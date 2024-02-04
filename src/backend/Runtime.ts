@@ -1,7 +1,7 @@
 import Parser from "../frontend/Parser";
 import Enviroment from "../structs/Enviroment";
 import { BinaryExpression, CallExpression, Identifier, NumberExpression, ParenthesizedExpression, UnaryExpression } from "../structs/Expressions";
-import { Program } from "../structs/Statements";
+import { ExpressionStatement, Program } from "../structs/Statements";
 import { ExpressionKind } from "../types/ast";
 import { Expression } from "../types/expressions";
 
@@ -17,7 +17,10 @@ export default class Runtime {
   }
 
   public evaluate() {
-    return this.evaluateExpression(this.program.expression);
+    const evaled = this.program.statements
+      .map(statement => this.evaluateExpression(statement.expression));
+    
+      return evaled.reduce((acc, curr) => acc + curr, 0);
   }
 
   private evaluateExpression(evaluate: Expression): number {
@@ -39,7 +42,7 @@ export default class Runtime {
         case '-':
           return left - right;
         default:
-          throw new Error(`runtime (l:${operator.line}, c:${operator.col}): Invalid operator found in binary expression: ${operator.text}`);
+          throw new Error(`runtime (l:${operator.line}, c:${operator.col}): Invalid operator founded in binary expression: ${operator.text}`);
       }
     }
 
@@ -55,26 +58,42 @@ export default class Runtime {
 
     if (this.isExpression<Identifier>(evaluate, ExpressionKind.Identifier)) {
       const value = this.env.getConstant(evaluate.name);
-      if(!value) throw new Error(`runtime (l: ${evaluate.token.line}, c: ${evaluate.token.col}): Not defined constant found during evaluation: ${evaluate.name}`);
+      if(!value) throw new Error(`runtime (l: ${evaluate.token.line}, c: ${evaluate.token.col}): Invalid constant founded during evaluation: ${evaluate.name}`);
 
       return value;
     }
 
     if (this.isExpression<CallExpression>(evaluate, ExpressionKind.CallExpression)) {
+      if (evaluate.instruction) {
+        const values: (string | number)[] = [];
+
+        evaluate.args.forEach(argument => {
+          if (argument.kind === ExpressionKind.Identifier) values.push((argument as Identifier).name);
+          else values.push(this.evaluateExpression(argument));
+        })
+
+        const instruction = this.env.getInstruction(evaluate.callee.text);
+        if(!instruction) throw new Error(`runtime (l: ${evaluate.callee.line}, c: ${evaluate.callee.col}): Invalid instruction founded during evaluation: ${evaluate.callee.text}`);
+
+        instruction(this.env, ...values);
+
+        return 0;
+      }
+
       const values: number[] = [];
       
       evaluate.args.forEach(argument => {
-        const value = this.evaluateExpression(argument as Identifier);
+        const value = this.evaluateExpression(argument);
         values.push(value);
       });
 
       const exec = this.env.getFunction(evaluate.callee.text);
-      if(!exec) throw new Error(`runtime (l: ${evaluate.callee.line}, c: ${evaluate.callee.col}): Not defined function found during evaluation: ${evaluate.callee.text}`);
+      if(!exec) throw new Error(`runtime (l: ${evaluate.callee.line}, c: ${evaluate.callee.col}): Invalid function founded during evaluation: ${evaluate.callee.text}`);
 
       return exec(...values);
     }
 
-    throw new Error(`runtime (l: -1, c: -1) [fatal-error]: Invalid expression found during evaluation: ${evaluate.kind}`);
+    throw new Error(`runtime (l: -1, c: -1) [fatal-error]: Invalid expression founded during evaluation: ${evaluate.kind}`);
   }
 
   private isExpression<T extends Expression>(expression: Expression, kind: ExpressionKind): expression is T {

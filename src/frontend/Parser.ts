@@ -1,9 +1,10 @@
 import { BinaryExpression, CallExpression, Identifier, NumberExpression, ParenthesizedExpression, UnaryExpression } from "../structs/Expressions";
-import { Program } from "../structs/Statements";
+import { ExpressionStatement, Program } from "../structs/Statements";
 import Token from "../structs/Token";
 import { TokenKind } from "../types/ast";
 import { Expression } from "../types/expressions";
 import { ParserProps } from "../types/frontend";
+import { Statement } from "../types/statements";
 import Lexer from "./Lexer";
 
 export default class Parser implements ParserProps {
@@ -20,10 +21,20 @@ export default class Parser implements ParserProps {
   }
 
   public parse(): Program {
-    const expression = this.parseExpression();
-    const program = new Program(expression);
+    const statements: ExpressionStatement[] = [];
+
+    while (this.current.kind !== TokenKind.Eof)
+      statements.push(this.parseExpressionStatement());
+
+    const program = new Program(statements);
 
     return program;
+  }
+
+  private parseExpressionStatement(): ExpressionStatement {
+    const expression = this.parseExpression();
+    
+    return new ExpressionStatement(expression);
   }
 
   private parseExpression(): Expression {
@@ -68,8 +79,9 @@ export default class Parser implements ParserProps {
     if (this.current.kind == TokenKind.Minus)
       return this.parseUnaryExpression();
 
-    if (this.current.kind == TokenKind.Identifier)
-      if (this.peek(1).kind == TokenKind.OpenParen) return this.parseCallExpression();
+    if (this.current.kind == TokenKind.Identifier || this.current.kind === TokenKind.At)
+      if (this.peek(1).kind == TokenKind.OpenParen || 
+        this.current.kind === TokenKind.At) return this.parseCallExpression();
       else return this.parseIdentifier();
 
    throw new Error(`parser (l:${this.current.line}, c:${this.current.col}): Invalid token found during parsing: "${this.current.text}"`);
@@ -99,13 +111,16 @@ export default class Parser implements ParserProps {
   }
 
   private parseCallExpression(): CallExpression {
+    const instruction = this.current.kind === TokenKind.At ?
+      this.expect(TokenKind.At) : null;
+
     const callee = this.expect(TokenKind.Identifier);
     const close = this.expect(TokenKind.OpenParen);
     const args = this.parseArguments();
     const open = this.expect(TokenKind.CloseParen);
     const parens: [open: Token, close: Token] = [open, close];
 
-    return new CallExpression(args, callee, parens);
+    return new CallExpression(args, callee, parens, !!instruction);
   }
 
   private parseArguments(): Expression[] {
