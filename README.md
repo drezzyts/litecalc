@@ -1,8 +1,8 @@
-# litecalc
+# ➕ litecalc
 
 The litecalc library is a lightweight and user-friendly mathematical expressions evaluator, tailored for simple mathematical operations.
 
-## Installation
+## 📦 Installation
 
 To install litecalc, use npm:
 
@@ -10,7 +10,7 @@ To install litecalc, use npm:
 npm install litecalc
 ```
 
-## Usage
+## ℹ Usage
 
 Litecalc is straightforward to use. After installation, import it and start evaluating expressions.
 
@@ -32,7 +32,7 @@ litecalc('pow(10, 2)'); // Output: 100
 litecalc('pi * 2'); // Output: 6.28...
 ```
 
-## Functions
+## 📐 Functions
 
 Litecalc supports the following mathematical functions:
 
@@ -43,9 +43,37 @@ Litecalc supports the following mathematical functions:
 - **``cos(angle)``**: Returns the cosine of an angle in radians.
 - **``tan(angle)``**: Returns the tangent of an angle in radians.
 
-## Constants
+## 🅱 Constants
+
 Litecalc includes the following mathematical constants:
 
 - **``pi``**: The mathematical constant representing the ratio of a circle's circumference to its diameter.
 - **``e``**: The mathematical constant representing the base of natural logarithms.
 - **``tau``**: The double of the mathematical constant pi, representing one full revolution in radians.
+
+## 💻 Instructions
+
+Litecalc includes the following interpreter instructions:
+
+- **``@set``**: Use for define constants.
+- **``@add``**: Use for add a value to one constant value.
+- **``@sub``**: Use for subtract a value to one constant value.
+- **``@remove``**: Use for delete a constant.
+
+### Examples
+
+```ts
+import { litecalc } from 'litecalc';
+
+litecalc(`
+  @set(a, 10)
+  @set(b, 15)
+  @set(sum, a + b)
+
+  @set(a, 15)
+  @set(b, 30)
+  @add(sum, a + b)
+
+  sum
+`); // 70
+```
